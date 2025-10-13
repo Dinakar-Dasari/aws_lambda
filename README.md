@@ -21,6 +21,7 @@
     + The environment is ephemeral — created and destroyed as needed.
   + But sometimes apps require fixed IPs then AWS lets us to run Lambda inside a VPC (Virtual Private Cloud). But even then, we still don’t get SSH or OS access — only network-level control.
   + Lambda never runs on its own. It waits for an event — and when that event happens, AWS spins up an execution environment, runs your function, and then tears it down.
+  + Lambda scales up and down automatically to handle your workloads, and we don't pay anything when our code isn't running.
   + An event is simply a trigger or signal telling Lambda to run your code.
       | Source                              | Event Type        | What it means                            |
       | ----------------------------------- | ----------------- | ---------------------------------------- |

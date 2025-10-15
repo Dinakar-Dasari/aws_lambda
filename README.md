@@ -48,3 +48,8 @@
   + EBS is part of the EC2 service family in AWS. There’s no separate service called “EBS” in boto3
   + So, anything you want to do with volumes or snapshots, you must call the EC2 API (since AWS groups EBS operations under EC2)
   + To talk to EBS (for listing, creating, or deleting snapshots), Lambda must use the EC2 API client via boto3.client('ec2')
+
++ aws_lambda function for deleting stale snapshost which are not assigned to any volumes or attached volumes are not inuse by any instance
+  + When we try to describe the snapshots, volumes, instances it will throw an error like it's not accessible as no permission to access it.
+  + By default aws lamdba creates a roles for function or we can select existing role.
+    + That role should have a policy to describe the instances, volumes & snapshots. 

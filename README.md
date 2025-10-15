@@ -42,3 +42,9 @@
   + So, Lambda calls only one function — the handler — when triggered
   + Any other functions must be called from inside that handler.
   + We can change to other name if required by editing the Lambda configuration,
+
++ For ebs snapshots we usigng `ec2 = boto3.client('ec2')` because
+  + When we give that aws_lambda connects to the EC2 service API — basically, the AWS backend that manages everything under the “EC2” umbrella (instances, volumes, snapshots, AMIs, etc.)
+  + EBS is part of the EC2 service family in AWS. There’s no separate service called “EBS” in boto3
+  + So, anything you want to do with volumes or snapshots, you must call the EC2 API (since AWS groups EBS operations under EC2)
+  + To talk to EBS (for listing, creating, or deleting snapshots), Lambda must use the EC2 API client via boto3.client('ec2')

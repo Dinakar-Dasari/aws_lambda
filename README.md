@@ -53,3 +53,10 @@
   + When we try to describe the snapshots, volumes, instances it will throw an error like it's not accessible as no permission to access it.
   + By default aws lamdba creates a roles for function or we can select existing role.
     + That role should have a policy to describe the instances, volumes & snapshots. 
+
++ Your Lambda didn’t finish executing before the timeout. This is a common issue when:
+  + You’re calling AWS APIs like describe_snapshots, describe_volumes, etc., and the response takes longer than expected.
+  + If you have hundreds or thousands of snapshots/volumes, this can be slow.
+  + Your Lambda’s timeout setting is too low. **Default is usually 3 seconds**, which is clearly too short for EBS snapshot operations.
+  + Sometimes network issues in Lambda can slow API calls, especially for multiple describe_volumes calls in a loop.
+  + fix: Increase Lambda timeout --> Go to Lambda → Configuration → General configuration → Timeout → increase to 30 seconds or more.

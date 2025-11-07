@@ -81,16 +81,32 @@
   + If we want to work with EC2 → use ec2 client
   + If we want to work with S3 → use s3 client
   + If we want to work with volumes → also ec2 client (because EBS is part of EC2)”
-+ He wrote the script like, first we already have running instances, will stop those instances first and later will start those stopped instances using the lambda function 
-
-  
-
-
++ He wrote the script like, first we already have running instances, will stop those instances first and later will start those stopped instances using the lambda function
++ **How it works in companies for stopping and creating instances:**
+  + You tag instances with something like: `Auto-instance-scheduler=yes`
+  + One Lambda function runs at 8 AM to start all tagged instances
+  + Another Lambda function runs at 8 PM to stop them
+  + Both functions are triggered via CloudWatch Events (cron)
+  + This way, developers have access to their dev/QA servers during working hours only. At night, those instances are stopped → saving compute cost.  
+  + **Cost calculation:**
+    + When you stop an EC2 instance:
+      + The instance shuts down like a normal computer.
+      + Its EBS (root) volume — i.e., your disk — remains attached (and data stays intact).
+      + The instance ID and configuration are preserved.
+      + The compute (CPU/RAM) resources are released back to AWS — meaning you are no longer billed for compute time.
+      + **So you stop paying for:**
+        + EC2 compute hours (the biggest cost for running instances)
+      + ❌ **But you still pay for:**
+        + EBS storage (because the volume still exists)
+        + Elastic IP (if it’s not attached to a running instance)
+        + Snapshots / other attached storage
+      + But since **compute is usually the most expensive part**,you can still save 60–80% of the total EC2 bill by stopping instances overnight. 
+---
 + For ebs snapshots we usigng `ec2 = boto3.client('ec2')` because
-  + When we give that aws_lambda connects to the EC2 service API — basically, the AWS backend that manages everything under the “EC2” umbrella (instances, volumes, snapshots, AMIs, etc.)
-  + EBS is part of the EC2 service family in AWS. There’s no separate service called “EBS” in boto3
-  + So, anything you want to do with volumes or snapshots, you must call the EC2 API (since AWS groups EBS operations under EC2)
-  + To talk to EBS (for listing, creating, or deleting snapshots), Lambda must use the EC2 API client via boto3.client('ec2')
++ When we give that aws_lambda connects to the EC2 service API — basically, the AWS backend that manages everything under the “EC2” umbrella (instances, volumes, snapshots, AMIs, etc.)
++ EBS is part of the EC2 service family in AWS. There’s no separate service called “EBS” in boto3
++ So, anything you want to do with volumes or snapshots, you must call the EC2 API (since AWS groups EBS operations under EC2)
++ To talk to EBS (for listing, creating, or deleting snapshots), Lambda must use the EC2 API client via boto3.client('ec2')
 
 + aws_lambda function for deleting stale snapshost which are not assigned to any volumes or attached volumes are not inuse by any instance
   + When we try to describe the snapshots, volumes, instances it will throw an error like it's not accessible as no permission to access it.

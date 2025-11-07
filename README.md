@@ -81,7 +81,7 @@
   + If we want to work with EC2 → use ec2 client
   + If we want to work with S3 → use s3 client
   + If we want to work with volumes → also ec2 client (because EBS is part of EC2)”
-+ 
++ He wrote the script like, first we already have running instances, will stop those instances first and later will start those stopped instances using the lambda function 
 
   
 

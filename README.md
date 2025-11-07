@@ -7,6 +7,7 @@
   + When our task is done we can destroy the instance. 
   + Here, we manage the infrastructure.
 + **Aws lambda:**
+  + Boto3, the official AWS SDK for Python, is used to create, configure, and manage AWS services.
   + It's a serverless computing.
   + When we create a Lambda function, we are not creating or managing any server.
   + AWS will run your code in a temporary, managed container.
@@ -33,6 +34,7 @@
   + AWS Lambda = Code that runs only when triggered by an event.
   + CloudWatch / EventBridge = Scheduler that generates the event.
 
+
 + **In EC2 — you manage and know the server.**
 + **In Lambda — AWS manages and hides the server.**
   + We just provide code and triggers; AWS handles the rest.
@@ -42,6 +44,47 @@
   + So, Lambda calls only one function — the handler — when triggered
   + Any other functions must be called from inside that handler.
   + We can change to other name if required by editing the Lambda configuration,
+
+#### client vs resources:
++ boto3 internally uses the AWS SDK for Python to make HTTPS API calls to AWS services.
++ Boto3 offers two distinct ways of accessing these abstracted APIs
+  + Client: low-level service access
+  + Resource: higher-level object-oriented service access
++ **client:**  
+  + `ec2_Client =  boto3.client(ec2)`
+  + In boto3, the client represents a low-level interface to a specific AWS service.
+  + Means, Clients allow you to make direct calls to AWS service APIs
+  + The response you get is a dictionary (JSON) — full of nested keys.
+  + it gives you full control but requires working with raw JSON responses.
+  + Clients require explicit configuration and credentials. You need to provide AWS access and secret keys, and optionally, session tokens and region information.
+  + Best for automation scripts, fine-grained control, or when you want to call exact AWS API actions.
++ **Resource:**
+  + `ec2_resource = boto3.resource('ec2')`
+  +  Boto3 resources, on the other hand, provide a higher-level, object-oriented interface to AWS services.
+  +  Resources encapsulate the underlying API calls and provide a more Pythonic and user-friendly experience.
+  +  You’re not dealing with raw JSON data.
+  +  It’s easier to use and more readable, but doesn’t expose every single API operation.
++  **Analogy:**
+  + Think of boto3 (the AWS SDK for Python) like a remote control for AWS
+    + The client is like pressing raw buttons on a remote — you have to know exactly what command to send (it’s lower-level).
+    + The resource is like a smart remote — you just say what you want, and it figures out the details for you (it’s higher-level, object-oriented).
+    + Both control AWS — but they do it differently.
+  + | Concept      | Analogy                                                                                | Example                                                      |
+    | ------------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+    | **Client**   | Talking to AWS using raw API calls (you must know exact command names & data formats). | “Call the EC2 API and give me all instance details as JSON.” |
+    | **Resource** | Talking to AWS in plain Python objects (simpler, human-readable).                      | “Hey AWS, list all EC2 instance objects for me.”             |
+       
+
+#### steps to program:
++ First, the function name should be `lambda_handler()`
++ mention the client,like ec2 = boto3.client('ec2')
+  + If we want to work with EC2 → use ec2 client
+  + If we want to work with S3 → use s3 client
+  + If we want to work with volumes → also ec2 client (because EBS is part of EC2)”
++ 
+
+  
+
 
 + For ebs snapshots we usigng `ec2 = boto3.client('ec2')` because
   + When we give that aws_lambda connects to the EC2 service API — basically, the AWS backend that manages everything under the “EC2” umbrella (instances, volumes, snapshots, AMIs, etc.)

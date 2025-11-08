@@ -101,6 +101,15 @@
         + Elastic IP (if it’s not attached to a running instance)
         + Snapshots / other attached storage
       + But since **compute is usually the most expensive part**,you can still save 60–80% of the total EC2 bill by stopping instances overnight. 
+-----
+#### What happens when a Lambda runs?
++ Every time your Lambda function executes, AWS automatically sends logs to **CloudWatch Logs**.
++ But for Lambda to do that, it needs permissions to create and write to CloudWatch Log Groups and Streams.
++ When your Lambda runs for the first time, it needs to:
+  + Create a new Log Group → /aws/lambda/<function-name> (if it doesn’t exist already)
+  + Create a Log Stream → something like /aws/lambda/my-lambda/2025/11/06
+  + Put log events → actually write the log lines (your function’s output)
++ Without these, Lambda would still run but fail to push logs — making debugging impossible.”
 ---
 + For ebs snapshots we usigng `ec2 = boto3.client('ec2')` because
 + When we give that aws_lambda connects to the EC2 service API — basically, the AWS backend that manages everything under the “EC2” umbrella (instances, volumes, snapshots, AMIs, etc.)
